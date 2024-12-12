@@ -8,6 +8,7 @@ typedef struct
     char name[100];
     int age;
 }User;
+
 void createUser(){
     FILE *file = fopen("users.txt", "a");
     if(!file){
