@@ -11,6 +11,7 @@ typedef struct {
     char op;      
 } Token;               
 
+
 int tokenize(const char *expression, Token tokens[]) {             
     int num = 0;
     int numFound = 0;
