@@ -1,111 +1,83 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <ctype.h>       
+#include<stdio.h>
 #include <string.h>
+void addition_subtraction(char *exp);
+int main(){
+    char exp[100];
+    int cnt =0;
+    int len = strlen(exp);
+    printf("Enter an expression: ");
+    fgets(exp, 100, stdin);
+    exp[strcspn(exp, "\n")] = '\0';
+    for(int i =0; exp[i] !='\0' ;i++){
+        if(exp[i] != ' '){
+            exp[cnt++]=exp[i];
+    }
+    }
+    exp[cnt] ='\0';
+    addition_subtraction(exp);
+}
+void addition_subtraction(char *exp){ 
 
-#define MAX_TOKENS 100  
-
-typedef struct {
-    int type;     
-    int value;    
-    char op;      
-} Token;               
-
-int tokenize(const char *expression, Token tokens[]) {             
-    int num = 0;
-    int numFound = 0;
-    int tokenCount = 0;
-
-    for (int i = 0; i < strlen(expression); i++) {
-        if (isdigit(expression[i])) {
-            num = num * 10 + (expression[i] - '0');  
-            numFound = 1;
-        } else {
-            if (numFound) {
-                tokens[tokenCount].type = 0;
-                tokens[tokenCount++].value = num;
-                num = 0;
-                numFound = 0;
-            }
-            if (expression[i] == '+' || expression[i] == '-' || expression[i] == '*' || expression[i] == '/') {
-                tokens[tokenCount].type = 1;
-                tokens[tokenCount++].op = expression[i];
-            }
+    int len = strlen(exp);  
+    for(int i=0;i<len;i++){
+        if(exp[i]!= '*'&&exp[i]!='+'&&exp[i]!='-'&&exp[i]!='/'&&exp[i]!='0'&&exp[i]!='1'&&exp[i]!='2'&&exp[i]!='3'&&exp[i]!='4'&&exp[i]!='5'&&exp[i]!='6'&&exp[i]!='7'&&exp[i]!='8'&&exp[i]!='9'){
+            printf("Error: Invalid expression\n");
+            return;
         }
     }
-
-    if (numFound) {
-        tokens[tokenCount].type = 0;
-        tokens[tokenCount++].value = num;
-    }
-
-    return tokenCount;
-}
-
-int evaluate_multiplication_division(Token tokens[], int *tokenCount) {
-    for (int i = 0; i < *tokenCount; i++) {
-        if (tokens[i].type == 1 && (tokens[i].op == '*' || tokens[i].op == '/')) {
+    for(int i =0;i<len;i++){
+        if(exp[i]=='*'|| exp[i]=='/'){
+            int a = exp[i-1] -'0';
+            int b = exp[i+1] -'0';
             int result;
-            if (tokens[i].op == '*') {
-                result = tokens[i - 1].value * tokens[i + 1].value;
-            } else {
-                if (tokens[i + 1].value == 0) {
-                    printf("Error: Division by zero.\n");
-                    exit(1);
-                }
-                result = tokens[i - 1].value / tokens[i + 1].value;
+            if(exp[i]=='*'){
+                result = a*b;
             }
-            tokens[i - 1].value = result;
+            if(exp[i]=='/'){
+                result = a/b;
+            }
+            char temp[10];
+            sprintf(temp, "%d", result);
 
-            for (int j = i; j < *tokenCount - 2; j++) {
-                tokens[j] = tokens[j + 2];
+            int j = i-1;
+            for(int k =0; temp[k] !='\0';j++,k++){
+                exp[j] = temp[k];
             }
-            *tokenCount -= 2;
-            i--;  
+            for(int k =i+2;k<len;j++,k++){
+                exp[j] = exp[k];
+            }
+            exp[j] = '\0';
+            len = strlen(exp);
+            i =-1;
         }
     }
-    return 0;
-}
+        
 
-int evaluate_addition_subtraction(Token tokens[], int *tokenCount) {
-    for (int i = 0; i < *tokenCount; i++) {
-        if (tokens[i].type == 1 && (tokens[i].op == '+' || tokens[i].op == '-')) {
+    for(int i=0;i<len;i++){
+        if(exp[i]=='+'|| exp[i]=='-'){
+            int a = exp[i-1] -'0';
+            int b = exp[i+1] -'0';
             int result;
-            if (tokens[i].op == '+') {
-                result = tokens[i - 1].value + tokens[i + 1].value;
-            } else {
-                result = tokens[i - 1].value - tokens[i + 1].value;
+            if(exp[i]=='+'){
+                result = a+b;
             }
-            tokens[i - 1].value = result;
+            if(exp[i]=='-'){
+                result = a-b;
+            }
+            char temp[10];
+            sprintf(temp, "%d", result);
 
-            for (int j = i; j < *tokenCount - 2; j++) {
-                tokens[j] = tokens[j + 2];
+            int j = i-1;
+            for(int k =0; temp[k] !='\0';j++,k++){
+                exp[j] = temp[k];
             }
-            *tokenCount -= 2;
-            i--;  
+            for(int k =i+2;k<len;j++,k++){
+                exp[j] = exp[k];
+            }
+            exp[j] = '\0';
+            len = strlen(exp);
+            i =-1;
         }
     }
-    return 0;
-}
-
-int main() {
-    char expression[100];
-    printf("Enter a mathematical expression: ");
-    fgets(expression, 100, stdin);
-    expression[strcspn(expression, "\n")] = '\0';  
-
-    Token tokens[MAX_TOKENS];
-    int tokenCount = tokenize(expression, tokens);
-
-    evaluate_multiplication_division(tokens, &tokenCount);
-
-    evaluate_addition_subtraction(tokens, &tokenCount);
-
-    if (tokenCount == 1 && tokens[0].type == 0) {
-        printf("Result: %d\n", tokens[0].value);
-    } else {
-        printf("Error: Invalid expression.\n");
-    }
-
-    return 0;
+    printf("The answer for the exp is: %s\n",exp);
 }
