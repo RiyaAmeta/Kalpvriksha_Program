@@ -1,13 +1,14 @@
-#include<stdio.h>
-#include<string.h>
-void add_new_user();
-void display_list_of_users();
-void update_user_info();
-void delete_user();
+#include <stdio.h>
+#include <string.h>
+void AddNewUser();
+void DisplayListOfUsers();
+void UpdateUserInformaion();
+void DeleteUser();
 int ID[100];
-char name[100][22];
-int age[100];
-int main(){
+char Name[100][22];
+int Age[100];
+int main()
+{
     // FILE *fptr;
     // fptr = fopen("users.txt","a");
     int ch;
@@ -19,106 +20,123 @@ int main(){
         printf("4- Delete a user, provide ID\n");
         printf("5-Exit the menu\n");
         printf("Enter your choice: ");
-        scanf("%d",&ch);
-        if(ch==1){
-            add_new_user();
-            
+        scanf("%d", &ch);
+        if (ch == 1)
+        {
+            AddNewUser();
         }
-        if(ch==2){
-            display_list_of_users();
+        if (ch == 2)
+        {
+            DisplayListOfUsers();
         }
-        if(ch==3){
-            update_user_info();
+        if (ch == 3)
+        {
+            UpdateUserInformaion();
         }
-        if(ch==4){
-            delete_user();
+        if (ch == 4)
+        {
+            DeleteUser();
         }
-        if(ch==5){
+        if (ch == 5)
+        {
             break;
         }
     }
-    
 }
-void add_new_user(){
+void AddNewUser()
+{
     FILE *fptr;
-    fptr = fopen("users.txt","a");
-    int i =0;
-    while (ID[i]!=0&&i<100){
+    fptr = fopen("users.txt", "a");
+    int i = 0;
+    while (ID[i] != 0 && i < 100)
+    {
         i++;
-        printf("%d",ID[i]);
+        printf("%d", ID[i]);
     }
     printf("Enter unique user ID: ");
-    scanf("%d",&ID[i]);
-    fprintf(fptr,"ID : %d\n",ID[i]);
-    printf("Enter user name: ");
-    scanf("%s",&name[i]);
-    fprintf(fptr,"Name : %s\n",name[i]);
-    printf("Enter user age: ");
-    scanf("%d",&age[i]);
-    fprintf(fptr,"Age : %d\n",age[i]);
+    scanf("%d", &ID[i]);
+    fprintf(fptr, "ID : %d\n", ID[i]);
+    printf("Enter user Name: ");
+    scanf("%s", &Name[i]);
+    fprintf(fptr, "Name : %s\n", Name[i]);
+    printf("Enter user Age: ");
+    scanf("%d", &Age[i]);
+    fprintf(fptr, "Age : %d\n", Age[i]);
     return;
     // fprintf(fptr,"\n");
     fclose(fptr);
 }
-void display_list_of_users(){
+void DisplayListOfUsers()
+{
     FILE *fptr;
-    fptr = fopen("users.txt","r");
-    if(fptr==NULL){
+    fptr = fopen("users.txt", "r");
+    if (fptr == NULL)
+    {
         printf("FIle dosen't exist.\n");
         return;
     }
     char ch;
-    while((ch=fgetc(fptr))!=EOF){
-        printf("%c",ch);
+    while ((ch = fgetc(fptr)) != EOF)
+    {
+        printf("%c", ch);
     }
     fclose(fptr);
 }
-void update_user_info(){
-    int i=0, IDu;
-    char nameU[22];
-    int ageU;
+void UpdateUserInformaion()
+{
+    int i = 0, UpdatedID;
+    char UpdatedName[22];
+    int UpdatedAge;
     printf("Enter ID to be updates : ");
-    scanf("%d",&IDu);
-    for (i = 0; i < 100; i++){
-        if(ID[i]==IDu){
-            printf("Enter new name: ");
-            scanf("%s",nameU);
-            strcpy(name[i],nameU);
-            printf("Enter new age: ");
-            scanf("%d", &ageU);
-            age[i]=ageU;
-            FILE *fptr = fopen("users.txt","w");
-            for (int j =0;ID[j]!=0 && j<100;j++){
-                fprintf(fptr,"ID : %d\n",ID[j]);
-                fprintf(fptr,"Name : %s\n",name[j]);
-                fprintf(fptr,"Age : %d\n",age[j]);
+    scanf("%d", &UpdatedID);
+    for (i = 0; i < 100; i++)
+    {
+        if (ID[i] == UpdatedID)
+        {
+            printf("Enter new Name: ");
+            scanf("%s", UpdatedName);
+            strcpy(Name[i], UpdatedName);
+            printf("Enter new Age: ");
+            scanf("%d", &UpdatedAge);
+            Age[i] = UpdatedAge;
+            FILE *fptr = fopen("users.txt", "w");
+            for (int j = 0; ID[j] != 0 && j < 100; j++)
+            {
+                fprintf(fptr, "ID : %d\n", ID[j]);
+                fprintf(fptr, "Name : %s\n", Name[j]);
+                fprintf(fptr, "Age : %d\n", Age[j]);
             }
             fclose(fptr);
             return;
-    
-        }}
-}
-void delete_user(){
-    int i=0, IDu;
-    // char nameU[22];
-    // int ageU[22];
-    printf("Enter ID to be deleted: ");
-    scanf("%d",&IDu);
-    for (i = 0; i < 100; i++){
-        if (ID[i] == IDu) {
-            for (int j = i; j < 99; j++) {
-                ID[j] = ID[j + 1];
-                strcpy(name[j], name[j + 1]);
-                age[j]=age[j + 1];
         }
-        FILE *fptr = fopen("users.txt","w");
-            for (int j =0;ID[j]!=0 && j<100;j++){
-                fprintf(fptr,"ID : %d\n",ID[j]);
-                fprintf(fptr,"Name : %s\n",name[j]);
-                fprintf(fptr,"Age : %d\n",age[j]);
-            }
-            fclose(fptr);
-        return;
     }
 }
+void DeleteUser()
+{
+    int i = 0, UpdatedID;
+    // char UpdatedName[22];
+    // int UpdatedAge[22];
+    printf("Enter ID to be deleted: ");
+    scanf("%d", &UpdatedID);
+    for (i = 0; i < 100; i++)
+    {
+        if (ID[i] == UpdatedID)
+        {
+            for (int j = i; j < 99; j++)
+            {
+                ID[j] = ID[j + 1];
+                strcpy(Name[j], Name[j + 1]);
+                Age[j] = Age[j + 1];
+            }
+            FILE *fptr = fopen("users.txt", "w");
+            for (int j = 0; ID[j] != 0 && j < 100; j++)
+            {
+                fprintf(fptr, "ID : %d\n", ID[j]);
+                fprintf(fptr, "Name : %s\n", Name[j]);
+                fprintf(fptr, "Age : %d\n", Age[j]);
+            }
+            fclose(fptr);
+            return;
+        }
+    }
 }
