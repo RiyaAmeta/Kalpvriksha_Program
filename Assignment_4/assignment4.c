@@ -1,90 +1,104 @@
 #include <stdio.h>
 #include <stdlib.h>
-void MatrixMultiplication(int **Matrix1, int **Matrix2, int **ResultMatrix, int RowMatrix1, int ColumnMatrix1, int RowMatrix2, int ColoumnMatrix2);
+
+void matrixMultiplication(int **matrix1, int **matrix2, int **resultMatrix, int rowMatrix1, int columnMatrix1, int rowMatrix2, int columnMatrix2);
+void inputMatrix(int **matrix, int rows, int cols);
+
 int main()
 {
-    int RowMatrix1, ColumnMatrix1, RowMatrix2, ColoumnMatrix2;
-    printf("Enter number of rows and coloumn for first matrix:");
-    scanf("%d %d", &RowMatrix1, &ColumnMatrix1);
+    int rowMatrix1, columnMatrix1, rowMatrix2, columnMatrix2;
 
-    printf("Enter number of rows and coloumn for second matrix:");
-    scanf("%d %d", &RowMatrix2, &ColoumnMatrix2);
+    printf("Enter number of rows and columns for first matrix: ");
+    scanf("%d %d", &rowMatrix1, &columnMatrix1);
 
-    if (ColumnMatrix1 != RowMatrix2)
+    printf("Enter number of rows and columns for second matrix: ");
+    scanf("%d %d", &rowMatrix2, &columnMatrix2);
+
+    if (columnMatrix1 != rowMatrix2)
     {
         printf("Matrix multiplication cannot be performed\n");
         return 1;
     }
 
-    int **Matrix1 = (int **)malloc(RowMatrix1 * sizeof(int *));
-    int **Matrix2 = (int **)malloc(RowMatrix2 * sizeof(int *));
-    int **ResultMatrix = (int **)malloc(RowMatrix1 * sizeof(int *));
+    int **matrix1 = (int **)malloc(rowMatrix1 * sizeof(int *));
+    int **matrix2 = (int **)malloc(rowMatrix2 * sizeof(int *));
+    int **resultMatrix = (int **)malloc(rowMatrix1 * sizeof(int *));
 
-    for (int i = 0; i < RowMatrix1; i++)
+    for (int row = 0; row < rowMatrix1; row++)
     {
-        Matrix1[i] = (int *)malloc(ColumnMatrix1 * sizeof(int));
-        ResultMatrix[i] = (int *)malloc(ColoumnMatrix2 * sizeof(int));
-    }
-    for (int i = 0; i < RowMatrix2; i++)
-    {
-        Matrix2[i] = (int *)malloc(ColoumnMatrix2 * sizeof(int));
-    }
-    printf("Enter first matrxi\n");
-    for (int i = 0; i < RowMatrix1; i++)
-    {
-        for (int j = 0; j < ColumnMatrix1; j++)
-        {
-            printf("Enter number :");
-            scanf("%d", &Matrix1[i][j]);
-        }
-    }
-    printf("Enter secnd matrix\n");
-    for (int i = 0; i < RowMatrix2; i++)
-    {
-        for (int j = 0; j < ColoumnMatrix2; j++)
-        {
-            printf("Enter number :");
-            scanf("%d", &Matrix2[i][j]);
-        }
+        matrix1[row] = (int *)malloc(columnMatrix1 * sizeof(int));
+        resultMatrix[row] = (int *)malloc(columnMatrix2 * sizeof(int));
     }
 
-    MatrixMultiplication(Matrix1, Matrix2, ResultMatrix, RowMatrix1, ColumnMatrix1, RowMatrix2, ColoumnMatrix2);
-
-    printf("Resultanat matrix :\n");
-    for (int i = 0; i < RowMatrix1; i++)
+    for (int row = 0; row < rowMatrix2; row++)
     {
-        for (int j = 0; j < ColoumnMatrix2; j++)
+        matrix2[row] = (int *)malloc(columnMatrix2 * sizeof(int));
+    }
+
+    // Taking Matrix as input from the user
+    printf("Enter first matrix\n");
+    inputMatrix(matrix1, rowMatrix1, columnMatrix1);
+
+    printf("Enter second matrix\n");
+    inputMatrix(matrix2, rowMatrix2, columnMatrix2);
+
+    // Matrix multiplication is performed
+    matrixMultiplication(matrix1, matrix2, resultMatrix, rowMatrix1, columnMatrix1, rowMatrix2, columnMatrix2);
+
+    // Output the resultant matrix
+    printf("Resultant matrix:\n");
+    for (int row = 0; row < rowMatrix1; row++)
+    {
+        for (int col = 0; col < columnMatrix2; col++)
         {
-            printf("%5d", ResultMatrix[i][j]);
+            printf("%5d", resultMatrix[row][col]);
         }
         printf("\n");
     }
 
-    for (int i = 0; i < RowMatrix1; i++)
+    // Free up the allocated memory 
+    for (int row = 0; row < rowMatrix1; row++)
     {
-        free(Matrix1[i]);
-        free(ResultMatrix[i]);
-    }
-    for (int i = 0; i < RowMatrix2; i++)
-    {
-        free(Matrix2[i]);
+        free(matrix1[row]);
+        free(resultMatrix[row]);
     }
 
-    free(Matrix1);
-    free(Matrix2);
-    free(ResultMatrix);
+    for (int row = 0; row < rowMatrix2; row++)
+    {
+        free(matrix2[row]);
+    }
+
+    free(matrix1);
+    free(matrix2);
+    free(resultMatrix);
+
     return 0;
 }
-void MatrixMultiplication(int **Matrix1, int **Matrix2, int **ResultMatrix, int RowMatrix1, int ColumnMatrix1, int RowMatrix2, int ColoumnMatrix2)
+
+// Function to input a matrix
+void inputMatrix(int **matrix, int rows, int cols)
 {
-    for (int i = 0; i < RowMatrix1; i++)
+    for (int row = 0; row < rows; row++)
     {
-        for (int j = 0; j < ColoumnMatrix2; j++)
+        for (int col = 0; col < cols; col++)
         {
-            ResultMatrix[i][j] = 0;
-            for (int k = 0; k < ColumnMatrix1; k++)
+            printf("Enter number for matrix: ");
+            scanf("%d", &matrix[row][col]);
+        }
+    }
+}
+
+// Function to perform matrix multiplication
+void matrixMultiplication(int **matrix1, int **matrix2, int **resultMatrix, int rowMatrix1, int columnMatrix1, int rowMatrix2, int columnMatrix2)
+{
+    for (int row = 0; row < rowMatrix1; row++)
+    {
+        for (int col = 0; col < columnMatrix2; col++)
+        {
+            resultMatrix[row][col] = 0;
+            for (int inner = 0; inner < columnMatrix1; inner++)
             {
-                ResultMatrix[i][j] = ResultMatrix[i][j] + Matrix1[i][k] * Matrix2[k][j];
+                resultMatrix[row][col] += matrix1[row][inner] * matrix2[inner][col];
             }
         }
     }
