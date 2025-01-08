@@ -2,7 +2,7 @@
 #include <math.h>
 #include<stdlib.h>
 
-void ModularExponentiation(int base, int exponent, int modulus, int *result)
+void ModularExponentiation(long long int base, long long int exponent, long long int modulus, long long int *result)
 {
     *result = 1;
     base = base % modulus;
@@ -21,14 +21,14 @@ void ModularExponentiation(int base, int exponent, int modulus, int *result)
 
 int main()
 {
-    int B, N, M, *result;
+    long long int B, N, M, *result;
     
     printf("Enter base (B): ");
-    scanf("%d", &B);
+    scanf("%lld", &B);
     printf("Enter exponent (N): ");
-    scanf("%d", &N);
+    scanf("%lld", &N);
     printf("Enter modulus (M): ");
-    scanf("%d", &M);
+    scanf("%lld", &M);
     if (M < 1)
     {
         printf("Modulus value M should be greater than 1\n");
