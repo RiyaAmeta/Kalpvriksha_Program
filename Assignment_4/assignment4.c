@@ -1,14 +1,20 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void matrixMultiplication(int **matrix1, int **matrix2, int **resultMatrix, int rowMatrix1, int columnMatrix1, int rowMatrix2, int columnMatrix2);
-void inputMatrix(int **matrix, int rows, int cols);
-int **allocateMemory(int rows, int cols);
-void deallocateMemory(int **matrix, int rows);
-void resultantMatrix(int **matrix, int rows, int cols);
+typedef struct{
+    int **data;
+    int rows;
+    int cols;
+}Matrix;
+void matrixMultiplication(Matrix *matrix1, Matrix *matrix2, Matrix *resultMatrix);
+void inputMatrix(Matrix *matrix);
+void allocateMemory(Matrix *matrix, int rows, int cols);
+void deallocateMemory(Matrix *matrix);
+void resultantMatrix(Matrix *matrix);
 
 int main()
 {
+    Matrix matrix1, matrix2, resultMatrix;
     int rowMatrix1, columnMatrix1, rowMatrix2, columnMatrix2;
 
     printf("Enter number of rows and columns for first matrix: ");
@@ -24,90 +30,91 @@ int main()
     }
 
     // Allocate memory for the matrices
-    int **matrix1 = allocateMemory(rowMatrix1, columnMatrix1);
-    int **matrix2 = allocateMemory(rowMatrix2, columnMatrix2);
-    int **resultMatrix = allocateMemory(rowMatrix1, columnMatrix2);
+    allocateMemory(&matrix1, rowMatrix1, columnMatrix1);
+    allocateMemory(&matrix2, rowMatrix2, columnMatrix2);
+    allocateMemory(&resultMatrix, rowMatrix1, columnMatrix2);
 
     // Taking Matrix as input from the user
     printf("Enter first matrix\n");
-    inputMatrix(matrix1, rowMatrix1, columnMatrix1);
+    inputMatrix(&matrix1);
 
     printf("Enter second matrix\n");
-    inputMatrix(matrix2, rowMatrix2, columnMatrix2);
+    inputMatrix(&matrix2);
 
     // Matrix multiplication is performed
-    matrixMultiplication(matrix1, matrix2, resultMatrix, rowMatrix1, columnMatrix1, rowMatrix2, columnMatrix2);
+    matrixMultiplication(&matrix1, &matrix2, &resultMatrix);
 
     // Output the resultant matrix
     printf("Resultant matrix:\n");
-    resultantMatrix(resultMatrix, rowMatrix1, columnMatrix2);
+    resultantMatrix(&resultMatrix);
 
     // Free up the allocated memory 
-    deallocateMemory(matrix1, rowMatrix1);
-    deallocateMemory(matrix2, rowMatrix2);
-    deallocateMemory(resultMatrix, rowMatrix1);
+    deallocateMemory(&matrix1);
+    deallocateMemory(&matrix2);
+    deallocateMemory(&resultMatrix);
 
     return 0;
 }
 
 // Function to input a matrix
-void inputMatrix(int **matrix, int rows, int cols)
+void inputMatrix(Matrix *matrix)
 {
-    for (int row = 0; row < rows; row++)
+    for (int row = 0; row < matrix->rows; row++)
     {
-        for (int col = 0; col < cols; col++)
+        for (int col = 0; col < matrix->cols; col++)
         {
             printf("Enter number for matrix: ");
-            scanf("%d", &matrix[row][col]);
+            scanf("%d", &matrix->data[row][col]);
         }
     }
 }
 
 // Function to perform matrix multiplication
-void matrixMultiplication(int **matrix1, int **matrix2, int **resultMatrix, int rowMatrix1, int columnMatrix1, int rowMatrix2, int columnMatrix2)
+void matrixMultiplication(Matrix *matrix1, Matrix *matrix2, Matrix *resultMatrix)
 {
-    for (int row = 0; row < rowMatrix1; row++)
+    for (int row = 0; row < matrix1->rows; row++)
     {
-        for (int col = 0; col < columnMatrix2; col++)
+        for (int col = 0; col < matrix2->cols; col++)
         {
-            resultMatrix[row][col] = 0;
-            for (int inner = 0; inner < columnMatrix1; inner++)
+            resultMatrix->data[row][col] = 0;
+            for (int inner = 0; inner < matrix1->cols; inner++)
             {
-                resultMatrix[row][col] += matrix1[row][inner] * matrix2[inner][col];
+                resultMatrix->data[row][col] += matrix1->data[row][inner] * matrix2->data[inner][col];
             }
         }
     }
 }
 
 // Function to allocate memory for a matrix
-int **allocateMemory(int rows, int cols)
+void allocateMemory(Matrix *matrix, int rows, int cols)
 {
-    int **matrix = (int **)malloc(rows * sizeof(int *));
+    matrix -> rows = rows;
+    matrix -> cols = cols;
+    matrix -> data = (int **)malloc(rows * sizeof(int *));
     for (int row = 0; row < rows; row++)
     {
-        matrix[row] = (int *)malloc(cols * sizeof(int));
+        matrix-> data[row] = (int *)malloc(cols * sizeof(int));
     }
-    return matrix;
 }
 
 // Function to deallocate memory for a matrix
-void deallocateMemory(int **matrix, int rows)
+void deallocateMemory(Matrix *matrix)
 {
-    for (int row = 0; row < rows; row++)
+    for (int row = 0; row < matrix->rows; row++)
     {
-        free(matrix[row]);
+        free(matrix->data[row]);
     }
-    free(matrix);
+    free(matrix->data);
 }
 
 // Function to print a matrix
-void resultantMatrix(int **matrix, int rows, int cols)
+void resultantMatrix(Matrix *matrix)
 {
-    for (int row = 0; row < rows; row++)
+    for (int row = 0; row < matrix->rows; row++)
     {
-        for (int col = 0; col < cols; col++)
+        for (int col = 0; col < matrix->cols; col++)
         {
-            printf("%5d", matrix[row][col]);
+            printf("%5d", matrix->data[row][col]);
         }
         printf("\n");
     }
