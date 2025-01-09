@@ -1,16 +1,28 @@
 #include <stdio.h>
 #include <string.h>
 
+int calculateStringLength(char str[]);
 int subStringPalindrome(char str[], int startIndex, int endIndex);
-void longestPalindrome(char str[]);
+void longestPalindrome(char str[], int *length);
 
 int main()
 {
     char inputString[100];
     printf("Enter a string: ");
     scanf("%s", inputString);
-    longestPalindrome(inputString);
+    int length = calculateStringLength(inputString);
+    longestPalindrome(inputString, &length);
     return 0;
+}
+
+int calculateStringLength(char str[])
+{
+    int length = 0;
+    while (str[length] != '\0')
+    {
+        length++;
+    }
+    return length;
 }
 
 int subStringPalindrome(char str[], int startIndex, int endIndex)
@@ -27,15 +39,14 @@ int subStringPalindrome(char str[], int startIndex, int endIndex)
     return 1;
 }
 
-void longestPalindrome(char str[])
+void longestPalindrome(char str[], int *length)
 {
     int maxlength = 1;
     int startofPalindrome = 0;
-    int stringLenght = strlen(str);
 
-    for (int start = 0; start < stringLenght; start++)
+    for (int start = 0; start < *length; start++)
     {
-        for (int end = start; end < stringLenght; end++)
+        for (int end = start; end < *length; end++)
         {
             if (subStringPalindrome(str, start, end))
             {
