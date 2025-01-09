@@ -54,3 +54,4 @@ void outputMatrix(int result[dimension][dimension])
         printf("\n");
     }
 }
+
