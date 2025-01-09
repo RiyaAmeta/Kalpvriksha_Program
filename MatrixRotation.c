@@ -22,7 +22,6 @@ int main()
     return 0;
 }
 
-//Function to take elements of matrix as input from user 
 void inputMatrix(int matrix[dimension][dimension])
 {
     for(int row = 0; row < dimension; row++)
@@ -35,7 +34,6 @@ void inputMatrix(int matrix[dimension][dimension])
     }
 }
 
-//Function for clockwise rotation of matrix by 90 degree 
 void rotateMatrix(int matrix[dimension][dimension], int result[dimension][dimension])
 {
     for(int row = 0; row < dimension; row++)
@@ -47,7 +45,6 @@ void rotateMatrix(int matrix[dimension][dimension], int result[dimension][dimens
     }
 }
 
-//Function to outpiut the rotated matrix
 void outputMatrix(int result[dimension][dimension])
 {
     for(int row = 0; row < dimension; row++){
