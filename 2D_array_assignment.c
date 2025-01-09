@@ -5,63 +5,73 @@
 #define MAX_COLUMNS 101
 #define MAX_NAME_LENGTH 51
  
-int inputValidation(int rows, int columns);
-void inputNames(char studentNames[MAX_ROWS][MAX_COLUMNS][MAX_NAME_LENGTH], int rows, int columns);
-int outputVowelNameCount(char studentNames[MAX_ROWS][MAX_COLUMNS][MAX_NAME_LENGTH], int rows, int columns);
-void outputLongestName(char studentNames[MAX_ROWS][MAX_COLUMNS][MAX_NAME_LENGTH], int rows, int columns, char longestName[MAX_NAME_LENGTH]);
-void printNameMatrix(char studentNames[MAX_ROWS][MAX_COLUMNS][MAX_NAME_LENGTH], int rows, int columns);
+typedef struct {
+    int rows;
+    int columns;
+} MatrixDimensions;
+ 
+typedef struct {
+    char names[MAX_ROWS][MAX_COLUMNS][MAX_NAME_LENGTH];
+    char longestName[MAX_NAME_LENGTH];
+    int vowelCount;
+} StudentMatrix;
+ 
+int inputValidation(MatrixDimensions dims);
+void inputNames(StudentMatrix *matrix, MatrixDimensions dims);
+int outputVowelNameCount(StudentMatrix *matrix, MatrixDimensions dims);
+void outputLongestName(StudentMatrix *matrix, MatrixDimensions dims);
+void printNameMatrix(StudentMatrix *matrix, MatrixDimensions dims);
  
 int main() {
-    int rows, columns;
-    char studentNames[MAX_ROWS][MAX_COLUMNS][MAX_NAME_LENGTH];
-    char longestName[MAX_NAME_LENGTH] = "";
+    MatrixDimensions dims;
+    StudentMatrix matrix = { .vowelCount = 0, .longestName = "" };
  
     printf("Enter number of rows between 1 to %d: ", MAX_ROWS);
-    scanf("%d", &rows);
+    scanf("%d", &dims.rows);
     printf("Enter number of columns between 1 to %d: ", MAX_COLUMNS);
-    scanf("%d", &columns);
+    scanf("%d", &dims.columns);
  
-    if (!inputValidation(rows, columns)) {
+    if (!inputValidation(dims)) {
         return 1;
     }
  
-    inputNames(studentNames, rows, columns);
+    inputNames(&matrix, dims);
  
-    int vowelCount = outputVowelNameCount(studentNames, rows, columns);
+    matrix.vowelCount = outputVowelNameCount(&matrix, dims);
  
-    outputLongestName(studentNames, rows, columns, longestName);
+    outputLongestName(&matrix, dims);
  
-    printNameMatrix(studentNames, rows, columns);
+    printNameMatrix(&matrix, dims);
  
-    printf("Number of names starting with a vowel: %d\n", vowelCount);
-    printf("The longest name: %s\n", longestName);
+    printf("Number of names starting with a vowel: %d\n", matrix.vowelCount);
+    printf("The longest name: %s\n", matrix.longestName);
  
     return 0;
 }
  
-int inputValidation(int rows, int columns) {
-    if (rows < 1 || rows > MAX_ROWS || columns < 1 || columns > MAX_COLUMNS) {
+int inputValidation(MatrixDimensions dims) {
+    if (dims.rows < 1 || dims.rows > MAX_ROWS || dims.columns < 1 || dims.columns > MAX_COLUMNS) {
         printf("Wrong input, the entered value is outside the constraint limit 1 to %d for rows and 1 to %d for columns.\n", MAX_ROWS, MAX_COLUMNS);
         return 0;
     }
     return 1;
 }
  
-void inputNames(char studentNames[MAX_ROWS][MAX_COLUMNS][MAX_NAME_LENGTH], int rows, int columns) {
+void inputNames(StudentMatrix *matrix, MatrixDimensions dims) {
     printf("Enter the names:\n");
-    for (int rowIndex = 0; rowIndex < rows; rowIndex++) {
-        for (int columnIndex = 0; columnIndex < columns; columnIndex++) {
+    for (int rowIndex = 0; rowIndex < dims.rows; rowIndex++) {
+        for (int columnIndex = 0; columnIndex < dims.columns; columnIndex++) {
             printf("Name at (%d,%d): ", rowIndex, columnIndex);
-            scanf("%s", studentNames[rowIndex][columnIndex]);
+            scanf("%s", matrix->names[rowIndex][columnIndex]);
         }
     }
 }
  
-int outputVowelNameCount(char studentNames[MAX_ROWS][MAX_COLUMNS][MAX_NAME_LENGTH], int rows, int columns) {
+int outputVowelNameCount(StudentMatrix *matrix, MatrixDimensions dims) {
     int vowelCount = 0;
-    for (int rowIndex = 0; rowIndex < rows; rowIndex++) {
-        for (int columnIndex = 0; columnIndex < columns; columnIndex++) {
-            char firstChar = studentNames[rowIndex][columnIndex][0];
+    for (int rowIndex = 0; rowIndex < dims.rows; rowIndex++) {
+        for (int columnIndex = 0; columnIndex < dims.columns; columnIndex++) {
+            char firstChar = matrix->names[rowIndex][columnIndex][0];
             if (firstChar == 'A' || firstChar == 'E' || firstChar == 'I' || firstChar == 'O' || firstChar == 'U' ||
                 firstChar == 'a' || firstChar == 'e' || firstChar == 'i' || firstChar == 'o' || firstChar == 'u') {
                 vowelCount++;
@@ -71,24 +81,24 @@ int outputVowelNameCount(char studentNames[MAX_ROWS][MAX_COLUMNS][MAX_NAME_LENGT
     return vowelCount;
 }
  
-void outputLongestName(char studentNames[MAX_ROWS][MAX_COLUMNS][MAX_NAME_LENGTH], int rows, int columns, char longestName[MAX_NAME_LENGTH]) {
+void outputLongestName(StudentMatrix *matrix, MatrixDimensions dims) {
     int maxLength = 0;
-    for (int rowIndex = 0; rowIndex < rows; rowIndex++) {
-        for (int columnIndex = 0; columnIndex < columns; columnIndex++) {
-            int currentLength = strlen(studentNames[rowIndex][columnIndex]);
+    for (int rowIndex = 0; rowIndex < dims.rows; rowIndex++) {
+        for (int columnIndex = 0; columnIndex < dims.columns; columnIndex++) {
+            int currentLength = strlen(matrix->names[rowIndex][columnIndex]);
             if (currentLength > maxLength) {
                 maxLength = currentLength;
-                strcpy(longestName, studentNames[rowIndex][columnIndex]);
+                strcpy(matrix->longestName, matrix->names[rowIndex][columnIndex]);
             }
         }
     }
 }
  
-void printNameMatrix(char studentNames[MAX_ROWS][MAX_COLUMNS][MAX_NAME_LENGTH], int rows, int columns) {
+void printNameMatrix(StudentMatrix *matrix, MatrixDimensions dims) {
     printf("The 2D array of names is:\n");
-    for (int rowIndex = 0; rowIndex < rows; rowIndex++) {
-        for (int columnIndex = 0; columnIndex < columns; columnIndex++) {
-            printf("%s ", studentNames[rowIndex][columnIndex]);
+    for (int rowIndex = 0; rowIndex < dims.rows; rowIndex++) {
+        for (int columnIndex = 0; columnIndex < dims.columns; columnIndex++) {
+            printf("%s ", matrix->names[rowIndex][columnIndex]);
         }
         printf("\n");
     }
