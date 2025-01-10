@@ -8,7 +8,7 @@
 int inputValidation(int rows, int columns);
 void inputNames(char names[MAX_ROWS][MAX_COLUMNS][MAX_NAME_LENGTH], int rows, int columns);
 int outputVowelNameCount(char names[MAX_ROWS][MAX_COLUMNS][MAX_NAME_LENGTH], int rows, int columns);
-void outputLongestName(char names[MAX_ROWS][MAX_COLUMNS][MAX_NAME_LENGTH], int rows, int columns, char longestName[MAX_NAME_LENGTH]);
+void outputLongestName(char names[MAX_ROWS][MAX_COLUMNS][MAX_NAME_LENGTH], int rows, int columns);
 void printNameMatrix(char names[MAX_ROWS][MAX_COLUMNS][MAX_NAME_LENGTH], int rows, int columns);
 
 int main()
@@ -31,7 +31,7 @@ int main()
     inputNames(names, rows, columns);
 
     vowelCount = outputVowelNameCount(names, rows, columns);
-    outputLongestName(names, rows, columns, longestName);
+    outputLongestName(names, rows, columns);
     printNameMatrix(names, rows, columns);
 
     printf("Number of names starting with a vowel: %d\n", vowelCount);
@@ -81,33 +81,37 @@ int outputVowelNameCount(char names[MAX_ROWS][MAX_COLUMNS][MAX_NAME_LENGTH], int
     return count;
 }
 
-void outputLongestName(char names[MAX_ROWS][MAX_COLUMNS][MAX_NAME_LENGTH], int rows, int columns, char longestName[MAX_NAME_LENGTH])
+void outputLongestName(char names[MAX_ROWS][MAX_COLUMNS][MAX_NAME_LENGTH], int rows, int columns)
 {
     int maxLength = 0;
+    char longestNames[MAX_ROWS * MAX_COLUMNS][MAX_NAME_LENGTH];
+    int count =0;
     for (int i = 0; i < rows; i++)
     {
         for (int j = 0; j < columns; j++)
         {
-            int currentLength = 0;
-
-            while (names[i][j][currentLength] != '\0')
-            {
-                currentLength++;
-            }
+            int currentLength = strlen(names[i][j]);
 
             if (currentLength > maxLength)
             {
                 maxLength = currentLength;
+                count = 0;
+                strcpy(longestNames[count], names[i][j]);
+                count++;
 
-                int k = 0;
-                while (names[i][j][k] != '\0')
-                {
-                    longestName[k] = names[i][j][k];
-                    k++;
-                }
+                else if (currentLength == maxLength)
+            {
+                strcpy(longestNames[count], names[i][j]);
+                count++;
+            }
                 longestName[k] = '\0';
             }
         }
+    }
+    printf("Longest name(s):\n");
+    for (int i = 0; i < count; i++)
+    {
+        printf("%s\n", longestNames[i]);
     }
 }
 
