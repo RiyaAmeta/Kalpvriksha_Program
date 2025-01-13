@@ -11,9 +11,6 @@ void concatinateString(char string1[], char string2[])
         string1Index++;
     }
 
-    string1[string1Index] = ' ';
-    string1Index++;
-
     while (string2[string2Index] != '\0')
     {
         string1[string1Index] = string2[string2Index];
