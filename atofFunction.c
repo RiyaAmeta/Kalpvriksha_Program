@@ -5,68 +5,86 @@
  
 void removeExtraSpace(char *str){
     int start =0;
-    int i =0;
+    int stringIndex =0;
     while (str[start] == ' ' || str[start] == '\t')
     {
         start++;
     }
-    for(i =0; str[i] != '\0'; i++, start++){
-        str[i] = str[start];
+    for(stringIndex =0; str[stringIndex] != '\0'; stringIndex++, start++){
+        str[stringIndex] = str[start];
     }
-    str[i] = '\0';
+    str[stringIndex] = '\0';
     
 }
 double atofFunction(char *str)
 {
-    char c;
-    int i = 0;
-    int j = 0;
-    int flag = 0;
+    char stringChar;
+    int stringIndex = 0;
+    int decimalCount = 0;
+    int decimalFlag = 0;
     double value = 0.0;
-    int exp =0;
+    int exponentFlag =0;
     double exponent =0.0;
-    while ((c = str[i]) != '\0')
+    int sign = 1;
+
+    if(str[stringIndex] == '+' || str[stringIndex] == '-'){
+        if(str[stringIndex] == '='){
+            sign = -1;
+        }
+        stringIndex++;
+    }
+
+    while ((stringChar = str[stringIndex]) != '\0')
     {
-        if (c >= '0' && c <= '9')
+        if (stringChar >= '0' && stringChar <= '9')
         {
  
-            value = (value * 10) + (c - '0');
-            if (flag == 1)
+            value = (value * 10) + (stringChar - '0');
+            if (decimalFlag == 1)
             {
-                j++;
+                decimalCount++;
             }
         }
-        else if (c == '.')
+        else if (stringChar == '.')
         {
-            if (flag == 1)
+            if (decimalFlag == 1)
             {
                 return 0;
             }
-            flag = 1;
+            decimalFlag = 1;
         }
-        else if(tolower(c) == 'e'){
-            exp =1;
-            i++;
+        else if(tolower(stringChar) == 'e'){
+            exponentFlag = 1;
+            stringIndex++;
             break;
         }
         else
         {
             return 0;
         }
-        i++;
+        stringIndex++;
     }
  
-    if(exp){
-        while ((isdigit(str[i])))
-        {
-            exponent = (exponent*10) + (str[i] - '0');
-            i++;
+    if(exponentFlag){
+        int expValue = 0;
+        int sign = 1;
+        if(str[stringIndex] == '+' || str[stringIndex] == '-'){
+            if(str[stringIndex] == '='){
+                sign = -1;
         }
+        stringIndex++;
+    }
+        while (str[stringIndex] >= '0' && str[stringIndex] <= '9')
+        {
+            expValue = (expValue*10) + (str[stringIndex] - '0');
+            stringIndex++;
+        }
+        exponent = expValue * sign;
         value = value * pow(10, exponent);
         
     }
  
-    value = value * pow(10, -j);
+    value = value * pow(10, -decimalCount);
     return value;
 }
  
@@ -80,3 +98,4 @@ int main()
     double result = atofFunction(str);
     printf("%lf", result);
 }
+
