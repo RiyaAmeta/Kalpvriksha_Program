@@ -1,46 +1,54 @@
 #include <stdio.h>
 #include <string.h>
 
-int findMatch(char grid[][100], int n, int m, char *word, int x, int y, int wordIndex)
+int wordIndex = 0;
+int findMatch(char grid[][100], int row, int col, char *word, int rowIndex, int colIndex)
 {
     int wordLength = strlen(word);
-    if (wordIndex == wordLength)
+    if (word[wordIndex] == '\0')
     {
         return 1;
     }
 
-    if (x < 0 || y < 0 || x >= n || y >= m || grid[x][y] != word[wordIndex])
+    if (rowIndex < 0 || colIndex < 0 || rowIndex >= row || colIndex >= col || grid[rowIndex][colIndex] != word[wordIndex])
     {
         return 0;
     }
 
-    char temp = grid[x][y];
-    grid[x][y] = '0';
+    char temp = grid[rowIndex][colIndex];
+    grid[rowIndex][colIndex] = '0';
 
-    int res = findMatch(grid, n, m, word, x - 1, y, wordIndex + 1) ||
-              findMatch(grid, n, m, word, x + 1, y, wordIndex + 1) ||
-              findMatch(grid, n, m, word, x, y - 1, wordIndex + 1) ||
-              findMatch(grid, n, m, word, x, y + 1, wordIndex + 1);
+    wordIndex++;
 
-    grid[x][y] = temp;
-    return res;
+    int result = findMatch(grid, row, col, word, rowIndex - 1, colIndex) ||
+              findMatch(grid, row, col, word, rowIndex + 1, colIndex) ||
+              findMatch(grid, row, col, word, rowIndex, colIndex - 1) ||
+              findMatch(grid, row, col, word, rowIndex, colIndex + 1) || 
+              findMatch(grid, row, col, word, rowIndex - 1, colIndex-1) ||
+              findMatch(grid, row, col, word, rowIndex - 1, colIndex+1) ||
+              findMatch(grid, row, col, word, rowIndex + 1, colIndex-1) ||
+              findMatch(grid, row, col, word, rowIndex + 1, colIndex+1);
+
+    grid[rowIndex][colIndex] = temp;
+    wordIndex--;
+    return result;
 }
 
-int wordExist(char grid[][100], int n, int m, char *word)
+int wordExist(char grid[][100], int row, int col, char *word)
 {
     int wordLength = strlen(word);
 
-    if (wordLength > n * m)
+    if (wordLength > row * col)
     {
         return 0;
     }
-    for (int i = 0; i < n; i++)
+    for (int i = 0; i < row; i++)
     {
-        for (int j = 0; j < m; j++)
+        for (int j = 0; j < col; j++)
         {
             if (grid[i][j] == word[0])
             {
-                if (findMatch(grid, n, m, word, i, j, 0))
+                if (findMatch(grid, row, col, word, i, j))
                 {
                     return 1;
                 }
@@ -63,12 +71,12 @@ int main()
     printf("Enter the word to find in the grid:");
     scanf("%s", word);
 
-    for (int i = 0; i < row; i++)
+    for (int rIndex = 0; rIndex < row; rIndex++)
     {
-        for (int j = 0; j < col; j++)
+        for (int cIndex = 0; cIndex < col; cIndex++)
         {
-            printf("Enter character at [%d][%d]:", i, j);
-            scanf(" %c", &grid[i][j]);
+            printf("Enter character at [%d][%d]:", rIndex, cIndex);
+            scanf(" %c", &grid[rIndex][cIndex]);
         }
     }
 
