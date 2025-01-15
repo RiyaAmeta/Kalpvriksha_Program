@@ -1,10 +1,21 @@
 #include <stdio.h>
-#include <string.h>
 
 int wordIndex = 0;
+
+int stringLength(char *word)
+{
+    int len = 0;
+    int i = 0;
+    while (word[i] != '\0')
+    {
+        len++;
+    }
+    return len;
+}
+
 int findMatch(char grid[][100], int row, int col, char *word, int rowIndex, int colIndex)
 {
-    int wordLength = strlen(word);
+    int wordLength = stringLength(word);
     if (word[wordIndex] == '\0')
     {
         return 1;
@@ -36,7 +47,7 @@ int findMatch(char grid[][100], int row, int col, char *word, int rowIndex, int 
 
 int wordExist(char grid[][100], int row, int col, char *word)
 {
-    int wordLength = strlen(word);
+    int wordLength = stringLength(word);
 
     if (wordLength > row * col)
     {
