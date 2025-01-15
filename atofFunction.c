@@ -98,4 +98,3 @@ int main()
     double result = atofFunction(str);
     printf("%lf", result);
 }
-
