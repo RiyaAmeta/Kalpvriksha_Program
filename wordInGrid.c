@@ -42,13 +42,13 @@ int wordExist(char grid[][100], int row, int col, char *word)
     {
         return 0;
     }
-    for (int i = 0; i < row; i++)
+    for (int indexrow = 0; indexrow < row; indexrow++)
     {
-        for (int j = 0; j < col; j++)
+        for (int indexcol = 0; indexcol < col; indexcol++)
         {
             if (grid[i][j] == word[0])
             {
-                if (findMatch(grid, row, col, word, i, j))
+                if (findMatch(grid, row, col, word, indexrow, indexcol))
                 {
                     return 1;
                 }
