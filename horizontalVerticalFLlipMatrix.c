@@ -46,7 +46,6 @@ int main()
     scanf("%d %d", &row, &col);
 
     int matrix[10][10];
-
     for (int rowIndex = 0; rowIndex < row; rowIndex++)
     {
         for (int colIndex = 0; colIndex < col; colIndex++)
