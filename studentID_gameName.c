@@ -11,14 +11,14 @@ void sortIDs(char IDs[10][20], int count)
 {
     for (int rowIndex = 0; rowIndex < count - 1; rowIndex++)
     {
-        for (int j = rowIndex + 1; j < count; j++)
+        for (int IDIndex = rowIndex + 1; IDIndex < count; IDIndex++)
         {
-            if (strcmp(IDs[rowIndex], IDs[j]) > 0)
+            if (strcmp(IDs[rowIndex], IDs[IDIndex]) > 0)
             {
                 char temp[20];
                 strcpy(temp, IDs[rowIndex]);
-                strcpy(IDs[rowIndex], IDs[j]);
-                strcpy(IDs[j], temp);
+                strcpy(IDs[rowIndex], IDs[IDIndex]);
+                strcpy(IDs[IDIndex], temp);
             }
         }
     }
