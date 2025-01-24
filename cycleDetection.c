@@ -23,7 +23,7 @@ void insertAtEnd(node **head, int data)
         *head = newNode;
         return;
     }
-    struct node *temp = *head;
+    node *temp = *head;
     while (temp->next != NULL)
     {
         temp = temp->next;
