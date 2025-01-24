@@ -47,9 +47,9 @@ void deleteTrack()
         if (musicList[trackIterator].trackID == trackID)
         {
             found = 1;
-            for (int j = trackIterator; j < trackCount - 1; j++)
+            for (int index = trackIterator; index < trackCount - 1; index++)
             {
-                musicList[j] = musicList[j + 1];
+                musicList[index] = musicList[index + 1];
             }
             trackCount--;
             printf("Track deleted successfully.\n");
@@ -118,13 +118,13 @@ void sortTracks()
 
     for (int trackIterator = 0; trackIterator < trackCount - 1; trackIterator++)
     {
-        for (int j = trackIterator + 1; j < trackCount; j++)
+        for (int index = trackIterator + 1; index < trackCount; index++)
         {
-            if (strcmp(musicList[trackIterator].title, musicList[j].title) > 0)
+            if (strcmp(musicList[trackIterator].title, musicList[jindextitle) > 0)
             {
                 temp = musicList[trackIterator];
-                musicList[trackIterator] = musicList[j];
-                musicList[j] = temp;
+                musicList[trackIterator] = musicList[index];
+                musicList[index] = temp;
             }
         }
     }
