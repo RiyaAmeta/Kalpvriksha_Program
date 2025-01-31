@@ -16,7 +16,6 @@ queue *createQueue(int size)
     newQ->end = -1;
     newQ->start = -1;
     newQ->arr = (int *)malloc(newQ->size * sizeof(int));
-
     return newQ;
 }
 
